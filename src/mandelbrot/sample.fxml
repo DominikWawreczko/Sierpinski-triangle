@@ -1,0 +1,15 @@
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:controller="mandelbrot.Controller"
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" stylesheets="/mandelbrot/main.css">
+    <Canvas fx:id="canvas" GridPane.columnIndex="0" GridPane.rowSpan="6" width="512" height="512"
+            onMouseDragged="#mouseMoves" onMousePressed="#mousePressed" onMouseReleased="#mouseReleased"/>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="0" text="Clear" onAction="#clearCanvas" minWidth="100"/>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Rectangle" onAction="#drawRect" minWidth="100"/>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="3" text="Draw" onAction="#draw" minWidth="100"/>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="4" text="Hello" onAction="#sayHello" minWidth="100"/>
+    <Button GridPane.columnIndex="1" GridPane.rowIndex="4" text="Your Rectangle" onAction="#drawYourRect" minWidth="100"/>
+    <Label  GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="label" minWidth="100" />
+</GridPane>

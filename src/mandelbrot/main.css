@@ -1,0 +1,10 @@
+.root {
+        -fx-background: #eee;
+}
+.button {
+        -fx-color: #f00;
+        -fx-font-weight: bold;
+}
+.label {
+        -fx-background-color: #ddf;
+}
