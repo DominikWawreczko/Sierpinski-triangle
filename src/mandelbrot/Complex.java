@@ -24,13 +24,13 @@ public class Complex implements Field<Complex> {
     }
 
     Complex(String numberInString){
-        String[] numbersArray = stringFactory(numberInString);
+        String[] numbersArray = dividecomplexNumberStringFactory(numberInString);
 
         this.r=Double.parseDouble(numbersArray[0]);
         this.i=Double.parseDouble(numbersArray[1]);
     }
 
-    private String[] stringFactory(String numberInString){
+    private String[] dividecomplexNumberStringFactory(String numberInString){
         if(isImaginaryPositive(numberInString)) {
             return devideWhenImaginaryisPositive(numberInString);
         }
@@ -44,13 +44,13 @@ public class Complex implements Field<Complex> {
         }
     }
 
-    private String[] devideWhenImaginaryisPositive(String numberInString){
+    public String[] devideWhenImaginaryisPositive(String numberInString){
         String[] parts = numberInString.split("\\+");
         parts[1] = deleteSymbolI(parts[1]);
         return parts;
     }
 
-    private String[] devideWhenBothAreNegative(String numberInString){
+    public String[] devideWhenBothAreNegative(String numberInString){
         String[] parts = numberInString.split("-");
          var realNumber = "-" + parts[1];
         var imaginaryNumber = "-" + parts[2];
@@ -58,7 +58,7 @@ public class Complex implements Field<Complex> {
         String[] returnArray = {realNumber, imaginaryNumber};
         return returnArray;
     }
-    private String[] devideWhenOnlyImaginaryisNegative(String numberInString){
+    public String[] devideWhenOnlyImaginaryisNegative(String numberInString){
         String[] parts = numberInString.split("-");
         var realNumber =  parts[0];
         var imaginaryNumber = "-" + parts[1];
@@ -71,7 +71,7 @@ public class Complex implements Field<Complex> {
         return imaginaryNumber.substring(0, imaginaryNumber.length() - 1);
     }
 
-    private boolean isImaginaryPositive(String numberInString ) {
+    public boolean isImaginaryPositive(String numberInString ) {
         boolean havePlus = false;
         for(int iterator = 0; iterator< numberInString.length(); iterator++)
         {
@@ -83,7 +83,7 @@ public class Complex implements Field<Complex> {
         return havePlus;
     }
 
-    private boolean areRealAndImaginaryNegative(String numberInString) {
+    public boolean areRealAndImaginaryNegative(String numberInString) {
         return numberInString.charAt(0)=='-';
     }
 
