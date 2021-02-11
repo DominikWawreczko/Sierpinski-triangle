@@ -9,7 +9,6 @@
     <Button GridPane.columnIndex="1" GridPane.rowIndex="0" text="Clear" onAction="#clearCanvas" minWidth="100"/>
     <Button GridPane.columnIndex="1" GridPane.rowIndex="1" text="Rectangle" onAction="#drawRect" minWidth="100"/>
     <Button GridPane.columnIndex="1" GridPane.rowIndex="3" text="Draw" onAction="#draw" minWidth="100"/>
-    <Button GridPane.columnIndex="1" GridPane.rowIndex="4" text="Hello" onAction="#sayHello" minWidth="100"/>
     <Button GridPane.columnIndex="1" GridPane.rowIndex="4" text="Your Rectangle" onAction="#drawYourRect" minWidth="100"/>
     <Label  GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="label" minWidth="100" />
 </GridPane>

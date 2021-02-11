@@ -257,9 +257,6 @@ public class Complex implements Field<Complex> {
         return base*scale;
     }
 
-    /* Dodatkowe metody */
-   /* Zwraca String z zapisaną
-        liczbą zespoloną formacie "-1.23+4.56i" */
     @Override
     public String toString(){
         String description;

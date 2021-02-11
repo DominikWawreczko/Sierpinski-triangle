@@ -1,7 +1,7 @@
 package mandelbrot;
 import java.lang.Math;
 
-public class FindPointInsideTriangle {
+public class FindRandomPointInsideTriangle {
 
     public static Complex findUsingInterceptTheorem(Complex pointA, Complex pointE, Complex pointD) {
         double randomNumber;
