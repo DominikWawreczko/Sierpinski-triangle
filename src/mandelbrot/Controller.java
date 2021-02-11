@@ -12,120 +12,62 @@ import javafx.scene.paint.Color;
 import java.lang.Math;
 
 
-           //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^66
-/*
-*
 
-Sometimes the clearRect(x, y, width, height) method on the canvas context might not erase the previous graphics drawn.
-* This usually happens when we’re drawing paths using methods like lineTo(), arc(), rect(), etc.
-* and then stroking them with stroke() or filling their content area using fill(). Here’s an example of what
-* I’m trying to convey.
-
-The solution to this problem is actually quite simple but the issue itself can cause major headache
-* if you’re unable to nail it. We basically have to call the beginPath() method on the 2D context.
-*  This method will create a new path and all the drawing functions called later will be directed to it.
-* If we do not call beginPath() (and then preferably closing that using closePath()), then all the drawing commands
-*  called will stack up in the memory and every time stroke() or fill() is called,
-*  it’ll draw all the graphic paths.*/
 public class Controller {
                public Canvas canvas;
                public Label label;
                private GraphicsContext gc;
-               private double x1;
-               private double x2;
-               private double x3;
-               private double y1;
-               private double y2;
-               private double y3;
+
                Complex p1,p2,p3;
                private Boolean sprawdzacz = false;
                private Boolean t1 = false;
                private Boolean t2 = false;
                private Boolean t3 = false;
                final int size = 512;
-               final int myIterator = 20000;
-               WritableImage wr = new WritableImage(size, size);//to bylo przed rect automatem
+               WritableImage wr = new WritableImage(size, size);
                PixelWriter pw = wr.getPixelWriter();
 
-
-
-
-               /*
-               Różnica między initialize a zwykłym kostruktorem jaet taka że wpierw ładuje się konstruktor,
-               następnie FXML
-                potem rzeczy z initailize
-               * */
 
                public void initialize() {
                    gc = canvas.getGraphicsContext2D();
                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                  // gc.beginPath();
-
-
-                   //
-
                }
 
                public void mouseMoves(MouseEvent mouseEvent) {
                }
 
-               public void rysujTrójkat(Complex p1,Complex p2, Complex p3) {
-
+               public void drawTriangle(Complex p1, Complex p2, Complex p3) {
+                   final int iterationsInSierpinskiTriangle = 20000;
 
                    CollinearChecker test = new CollinearChecker(p1,p2,p3);
-
-                   System.out.println(p3.getIm());
-
-
-
-                   Complex gamepoint=new Complex(PodajPunktWewnatrzTrojkata.znajdz(p1,p2,p3)); //(((p1.getRe()+p2.getRe()+p3.getRe())/2),(p1.getIm()+p2.getIm()+p3.getIm())/2);
+                   Complex gamepoint=new Complex(FindPointInsideTriangle.findUsingInterceptTheorem(p1,p2,p3)); //(((p1.getRe()+p2.getRe()+p3.getRe())/2),(p1.getIm()+p2.getIm()+p3.getIm())/2);
                    System.out.println("Przed if");
                    System.out.println(p3.getIm());
 
-                   if (test.checkIfTheyAreCollinear() == true) {//czyli nie są wspólniniowe
+                   if (test.checkIfTheyAreNotCollinear() == true) {//czyli nie są wspólniniowe
                        System.out.println("Przed pętlą");
                        System.out.println(p3.getIm());
                        double s = Math.random();
 
 
-                       for (int i = 0; i < myIterator; i++) {
+                       for (int i = 0; i < iterationsInSierpinskiTriangle; i++) {
                            s = Math.random();
                            Complex p;
-                           if (s <= 0.333) {
+                           if (s <= 1.0/3.0) {
                                p = p1;
-
-                               // System.out.println(i);
-
-
-
-
-                           } else if (s <= 0.666) {//(1/3)nie działało
+                           } else if (s <= 2.0/3.0) {
                                p=p2;
-
-
-
-
-                               //   System.out.println(i);
-
-
-                           } else {
+                       } else {
                                p=p3;
-
-
-
-
-                               //   System.out.println(i);
                            }
                            gamepoint.add(p);
                            int a , b;
 
                            gamepoint.setRe((gamepoint.getRe())/2);
                           gamepoint.setIm((gamepoint.getIm())/2);
-                          //System.out.println(a,b);
 
                            a=(int)gamepoint.getRe();
                            b=(int)gamepoint.getIm();
-                          // System.out.println("  "+a+"  "+b);
                            pw.setArgb((int) gamepoint.getRe(), (int) gamepoint.getIm(), 0xFFFF00FF);
                            System.out.println("Rysuje");
 
@@ -142,7 +84,6 @@ public class Controller {
                    t3 = false;
                }
 
-               //*********************************************************
 
                public void mousePressed(MouseEvent mouseEvent) {
                    if (sprawdzacz == true) {//czyli tylko wtedy gdy chcemy sami robić trójkąt
@@ -166,7 +107,7 @@ public class Controller {
                            System.out.println(mouseEvent.getY());
 
 
-                           rysujTrójkat(p1,p2,p3);
+                           drawTriangle(p1,p2,p3);
                            System.out.println("Po trójkącie");
                          //  System.out.println(p3.toString());
                            System.out.println(p3.getIm());

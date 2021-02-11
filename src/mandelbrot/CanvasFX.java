@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-
-
-
 public class CanvasFX extends Application {
 
     @Override

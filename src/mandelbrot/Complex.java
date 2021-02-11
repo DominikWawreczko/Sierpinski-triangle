@@ -24,34 +24,47 @@ public class Complex implements Field<Complex> {
     }
 
     Complex(String numberInString){
-        String realNumber;
-        String imaginaryNumber;
+        String[] numbersArray = stringFactory(numberInString);
 
+        this.r=Double.parseDouble(numbersArray[0]);
+        this.i=Double.parseDouble(numbersArray[1]);
+    }
+
+    private String[] stringFactory(String numberInString){
         if(isImaginaryPositive(numberInString)) {
-            String[] parts = numberInString.split("\\+");//dzielimy stringa po znaku +
-            realNumber=parts[0];
-            imaginaryNumber=parts[1];
+            return devideWhenImaginaryisPositive(numberInString);
         }
 
         //gdy nie ma + to sprawa się kompilikuje bo mamy 2 warianty
-        else if(areBothNegative(numberInString)){
-            String[] parts = numberInString.split("-");
-            realNumber="-"+parts[1];
-            imaginaryNumber="-"+parts[2];
+        else if(areRealAndImaginaryNegative(numberInString)){
+            return devideWhenBothAreNegative(numberInString);
         }
-        else{//czyli  1-2i
-            String[] parts = numberInString.split("-");//dzielimy stringa po znaku -
-            realNumber=parts[0];
-            imaginaryNumber="-"+parts[1];
+        else{
+            return devideWhenOnlyImaginaryisNegative(numberInString);
+        }
+    }
 
-        }
-        //teraz zawsze przy urojonej zostaje 2i itd więc trzeba pozbyć się 'i'
+    private String[] devideWhenImaginaryisPositive(String numberInString){
+        String[] parts = numberInString.split("\\+");
+        parts[1] = deleteSymbolI(parts[1]);
+        return parts;
+    }
+
+    private String[] devideWhenBothAreNegative(String numberInString){
+        String[] parts = numberInString.split("-");
+         var realNumber = "-" + parts[1];
+        var imaginaryNumber = "-" + parts[2];
         imaginaryNumber = deleteSymbolI(imaginaryNumber);
-        this.r=Double.parseDouble(realNumber);
-        this.i=Double.parseDouble(imaginaryNumber);
-
-
-
+        String[] returnArray = {realNumber, imaginaryNumber};
+        return returnArray;
+    }
+    private String[] devideWhenOnlyImaginaryisNegative(String numberInString){
+        String[] parts = numberInString.split("-");
+        var realNumber =  parts[0];
+        var imaginaryNumber = "-" + parts[1];
+        imaginaryNumber = deleteSymbolI(imaginaryNumber);
+        String[] returnArray = {realNumber, imaginaryNumber};
+        return returnArray;
     }
 
     private String deleteSymbolI(String imaginaryNumber) {
@@ -70,7 +83,7 @@ public class Complex implements Field<Complex> {
         return havePlus;
     }
 
-    private boolean areBothNegative(String numberInString) {
+    private boolean areRealAndImaginaryNegative(String numberInString) {
         return numberInString.charAt(0)=='-';
     }
 
@@ -138,7 +151,6 @@ public class Complex implements Field<Complex> {
     }
 
     double sqrAbs(){
-
         return (abs()*abs());
     }
 
@@ -156,8 +168,8 @@ public class Complex implements Field<Complex> {
 
     static Complex scale(Complex p, double a){
         Complex scaled=new Complex(p);
-        scaled.i=scaled.i*a;
-        scaled.r=scaled.r*a;
+        scaled.i = scaleSingleNumber(scaled.i, a);
+        scaled.r = scaleSingleNumber(scaled.r, a);
         return scaled;
     }
 
@@ -168,11 +180,11 @@ public class Complex implements Field<Complex> {
         return new Complex(real, imaginary);
     }
 
-    static Complex sub(Complex a, Complex f){
-        double temp1,temp2;
-        temp1=a.r-f.r;
-        temp2=a.i-f.i;
-        return new Complex(temp1,temp2);
+    static Complex sub(Complex complex, Complex complex1){
+        double real, imaginary;
+        real = countRealNumberAfterSubtraction(complex, complex1);
+        imaginary = countImaginaryNumberAfterSubtraction(complex, complex1);
+        return new Complex(real, imaginary);
     }
 
     static Complex mul(Complex complex, Complex complex1){
@@ -233,36 +245,40 @@ public class Complex implements Field<Complex> {
         return ((nominator.i*denominator.r)-(denominator.i*nominator.r))/((denominator.i*denominator.i)+(denominator.r*denominator.r));
     }
 
+    private static double countRealNumberAfterSubtraction(Complex complex, Complex complex1) {
+        return complex.r - complex1.r;
+    }
+
+    private static double countImaginaryNumberAfterSubtraction(Complex complex, Complex complex1) {
+        return complex.i - complex1.i;
+    }
+
+    private static double scaleSingleNumber(double base, double scale){
+        return base*scale;
+    }
+
     /* Dodatkowe metody */
    /* Zwraca String z zapisaną
         liczbą zespoloną formacie "-1.23+4.56i" */
     @Override
     public String toString(){
-        String zwrotny;
+        String description;
         if(this.i<0){
-            zwrotny=Double.toString(this.r)+ this.i +"i";
+            description=Double.toString(this.r)+ this.i +"i";
         }
         else{
-            zwrotny= this.r +"+"+ this.i +"i";
+            description= this.r +"+"+ this.i +"i";
         }
-        return zwrotny;
-
+        return description;
     }
 
-
-    /* Return number in format: "-1.23+4.56i" */
     static Complex valueOf(String a){
         return new Complex(a);
-
     }
 
-
-    /* Przypisuje podaną wartość części rzeczywistej */
     void setRe(double r){
         this.r=r;
     }
-
-    /* Przypisuje podaną wartość części urojonej */
 
     void setIm(double i){
         this.i=i;
@@ -279,6 +295,7 @@ public class Complex implements Field<Complex> {
     double getRe(){
         return this.r;
     }
+
     double getIm(){
         return this.i;
     }
