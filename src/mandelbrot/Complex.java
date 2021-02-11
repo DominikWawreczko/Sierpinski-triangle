@@ -46,9 +46,9 @@ public class Complex implements Field<Complex> {
 
         }
         //teraz zawsze przy urojonej zostaje 2i itd więc trzeba pozbyć się 'i'
-        String nowaurojona= deleteSymbolI(imaginaryNumber);
+        imaginaryNumber = deleteSymbolI(imaginaryNumber);
         this.r=Double.parseDouble(realNumber);
-        this.i=Double.parseDouble(nowaurojona);
+        this.i=Double.parseDouble(imaginaryNumber);
 
 
 
@@ -74,8 +74,6 @@ public class Complex implements Field<Complex> {
         return numberInString.charAt(0)=='-';
     }
 
-
-
     @Override
     public boolean equals(Object obj){
         if (areSame(this,obj)) {
@@ -88,12 +86,7 @@ public class Complex implements Field<Complex> {
             return false;
         }
         Complex secondComplex = (Complex) obj;
-        if(haveSameParams(this, secondComplex)){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return haveSameParams(this, secondComplex);
     }
 
     private boolean areSame(Object obj1, Object obj2){
@@ -113,9 +106,9 @@ public class Complex implements Field<Complex> {
     }
 
     @Override
-    public Complex add(Complex f){
-        this.r=this.r+f.r;
-        this.i=this.i+f.i;
+    public Complex add(Complex complex){
+        this.r = countRealNumberAfterAdding(this, complex);
+        this.i = countImaginaryNumberAfterAdding(this, complex);
         return this;
     }
 
@@ -127,26 +120,14 @@ public class Complex implements Field<Complex> {
     }
 
     @Override
-    public Complex mul(Complex f){
-
-        double temp, temp2,temp3,temp4;
-        temp=(this.r*f.r);
-        temp2=(this.i*f.i);
-        temp3=(this.i*f.r);
-        System.out.println("T3"+temp3);
-        temp4=(f.i*this.r);
-        System.out.println("fi"+this.r);
-        this.r=temp-temp2;
-        this.i=temp3+temp4;
-        System.out.println("T4"+temp4);
-
+    public Complex mul(Complex complex){
+        this.r = countRealNumberAfterMultiplication(this, complex);
+        this.i = countImaginaryNumberAfterMultiplication(this, complex);
         return this;
     }
 
     @Override
     public Complex div(Complex denominator){
-        double temp1,temp2;
-
         this.r = countRealNumberAfterDivision(this, denominator);
         this.i = countImaginaryNumberAfterDivision(this, denominator);
         return this;
@@ -180,36 +161,32 @@ public class Complex implements Field<Complex> {
         return scaled;
     }
 
-    static Complex add(Complex a, Complex f){
-        double temp1,temp2;
-        temp1=a.r+f.r;
-        temp2=a.i+f.i;
-        Complex nowy=new Complex(temp1,temp2);
-        return nowy;
+    static Complex add(Complex complex, Complex complex1){
+        double real, imaginary;
+        real = countRealNumberAfterAdding(complex, complex1);
+        imaginary = countImaginaryNumberAfterAdding(complex, complex1);
+        return new Complex(real, imaginary);
     }
 
     static Complex sub(Complex a, Complex f){
         double temp1,temp2;
         temp1=a.r-f.r;
         temp2=a.i-f.i;
-        Complex nowy=new Complex(temp1,temp2);
-        return nowy;
+        return new Complex(temp1,temp2);
     }
 
-    static Complex mul(Complex a, Complex f){
-        double temp1,temp2;
-        temp1=(a.r*f.r)-(a.i*f.i);
-        temp2=(a.i*f.r)+(f.i*a.r);
-        Complex nowy=new Complex(temp1,temp1);
-        return nowy;
+    static Complex mul(Complex complex, Complex complex1){
+        double real, imaginary;
+        real = countRealNumberAfterMultiplication(complex, complex1);
+        imaginary = countImaginaryNumberAfterMultiplication(complex, complex1);
+        return new Complex(real, imaginary);
     }
 
     static Complex div(Complex complex1, Complex complex2){
         double imaginary ,real;
         imaginary = countImaginaryNumberAfterDivision(complex1, complex2);
         real = countRealNumberAfterDivision(complex1, complex2);
-        Complex nowy=new Complex(imaginary, real);
-        return nowy;
+        return new Complex(imaginary, real);
     }
 
     static double abs(Complex a){
@@ -232,6 +209,22 @@ public class Complex implements Field<Complex> {
         return a.i;
     }
 
+    private static double countRealNumberAfterAdding(Complex complex, Complex complex1) {
+        return complex.r + complex1.r;
+    }
+
+    private static double countImaginaryNumberAfterAdding(Complex complex, Complex complex1) {
+        return complex.i + complex1.i;
+    }
+
+    private static double countRealNumberAfterMultiplication(Complex complex, Complex complex1) {
+        return (complex.r * complex1.r) - (complex.i * complex1.i);
+    }
+
+    private static double countImaginaryNumberAfterMultiplication(Complex complex, Complex complex1) {
+        return (complex.i * complex1.r) + (complex1.i * complex.r);
+    }
+
     private static double countRealNumberAfterDivision(Complex nominator, Complex denominator) {
         return ((nominator.r * denominator.r) + (nominator.i * denominator.i)) / ((denominator.i * denominator.i) + (denominator.r * denominator.r));
     }
@@ -247,21 +240,19 @@ public class Complex implements Field<Complex> {
     public String toString(){
         String zwrotny;
         if(this.i<0){
-            zwrotny=Double.toString(this.r)+Double.toString(this.i)+"i";
+            zwrotny=Double.toString(this.r)+ this.i +"i";
         }
         else{
-            zwrotny=Double.toString(this.r)+"+"+Double.toString(this.i)+"i";
+            zwrotny= this.r +"+"+ this.i +"i";
         }
         return zwrotny;
 
-    };
+    }
 
 
-    /* Zwraca liczbę zespolona o wartości podanej
-     w argumencie w formacie "-1.23+4.56i" */
+    /* Return number in format: "-1.23+4.56i" */
     static Complex valueOf(String a){
-        Complex mytotalynewobj=new Complex(a);
-        return mytotalynewobj;
+        return new Complex(a);
 
     }
 

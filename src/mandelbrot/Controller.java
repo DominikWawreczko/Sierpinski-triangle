@@ -72,7 +72,7 @@ public class Controller {
                public void rysujTrójkat(Complex p1,Complex p2, Complex p3) {
 
 
-                   CzyPunktySaWspoliniowe test = new CzyPunktySaWspoliniowe(p1,p2,p3);
+                   CollinearChecker test = new CollinearChecker(p1,p2,p3);
 
                    System.out.println(p3.getIm());
 
@@ -82,7 +82,7 @@ public class Controller {
                    System.out.println("Przed if");
                    System.out.println(p3.getIm());
 
-                   if (test.sprawdzamWspoliniowosc() == true) {//czyli nie są wspólniniowe
+                   if (test.checkIfTheyAreCollinear() == true) {//czyli nie są wspólniniowe
                        System.out.println("Przed pętlą");
                        System.out.println(p3.getIm());
                        double s = Math.random();
